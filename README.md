@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![iTeraPlay Logo](https://iteraplay.com/media/logo.png)
+<img src="https://iteraplay.com/media/logo.png" alt="iTeraPlay Logo" width="200">
 
 **🚀 Play, Download & Stream TeraBox Videos Online**
 
@@ -74,7 +74,7 @@
 - **Frontend**: Responsive HTML/CSS with Ajax-powered interactions  
 - **Database**: MySQL with optimized queries and indexing
 - **Email System**: SMTP integration with premium HTML templates
-- **Cloudflare Workers**: Ultra-fast video processing at `https://iteraplay.infoapi.workers.dev/`
+- **Cloudflare Workers**: Ultra-fast global video processing infrastructure
 - **Security**: SSL encryption, CSRF protection, input validation, and rate limiting
 
 ---
@@ -126,18 +126,12 @@
 ## 🔌 Cloudflare Worker API
 
 ### 🚀 **Core Processing Engine**
-Our Cloudflare Worker at `https://iteraplay.infoapi.workers.dev/` powers the entire platform with ultra-fast TeraBox video processing.
+Our advanced Cloudflare Worker infrastructure powers the entire platform with ultra-fast TeraBox video processing across multiple global edge locations.
 
-### 📊 **Available Endpoints**
-- `POST /api/generate-file.php` - Get video metadata and thumbnails
-- `POST /api/generate-link.php` - Generate direct download links
-- `POST /api/index.php` - Complete video processing endpoint
-- `POST /api/identify-video.php` - Video identification and validation
-
-### 🔑 **Cloudflare Worker Integration**
+### 🔑 **Example Worker Integration**
 ```javascript
-// Direct Cloudflare Worker API call
-const response = await fetch('https://iteraplay.infoapi.workers.dev/', {
+// Example Worker API integration
+const response = await fetch('https://example-worker.your-domain.workers.dev/', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -151,9 +145,9 @@ const data = await response.json();
 
 ### 🔧 **PHP Implementation**
 ```php
-// Server-side API call to Cloudflare Worker with cURL (recommended)
-function callCloudflareWorker($terabox_url) {
-    $workerUrl = "https://iteraplay.infoapi.workers.dev/";
+// Server-side API call to Example Worker with cURL (recommended)
+function callExampleWorker($terabox_url) {
+    $workerUrl = "https://example-worker.your-domain.workers.dev/";
     
     $ch = curl_init($workerUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -203,7 +197,7 @@ $response = file_get_contents($workerUrl, false, $context);
 ### 🛠️ **Integration Examples**
 ```php
 // Example: Process and display video
-$data = callCloudflareWorker($teraboxUrl);
+$data = callExampleWorker($teraboxUrl);
 if ($data && !isset($data['error'])) {
     echo "File: " . $data['file_name'];
     echo "Size: " . $data['file_size']; 
