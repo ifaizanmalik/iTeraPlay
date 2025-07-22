@@ -128,32 +128,67 @@
 ### 🚀 **Core Processing Engine**
 Our advanced Cloudflare Worker infrastructure powers the entire platform with ultra-fast TeraBox video processing across multiple global edge locations.
 
-### 🔑 **Example Worker Integration**
+### 🔑 **Cloudflare Worker API Integration**
+
+Our Cloudflare Worker now requires **domain-specific API keys** for authentication. Each authorized domain gets its own unique API key for secure access.
+
+#### **🔐 API Key Authentication**
 ```javascript
-// Example Worker API integration
-const response = await fetch('https://example-worker.your-domain.workers.dev/', {
+// Worker API integration with required API key
+const response = await fetch('https://your-worker.workers.dev/', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
+        'X-API-Key': 'your_domain_specific_api_key', // Required!
+        // Alternative: 'Authorization': 'Bearer your_domain_specific_api_key'
     },
     body: JSON.stringify({ link: teraboxUrl })
 });
 
 const data = await response.json();
-// Returns: file_name, file_size, thumbnail, download_link, proxy_url
+if (data.error) {
+    console.error('API Error:', data.message);
+    // Contact WhatsApp: +91 9031063699 for API access
+} else {
+    // Success: process file data
+    console.log('File:', data.list[0].name);
+}
 ```
 
-### 🔧 **PHP Implementation**
+#### **🛡️ Domain-Based Security**
+- Each domain requires its own specific API key
+- API keys are validated against the requesting domain
+- Unauthorized domains receive 401 error responses
+- Contact **WhatsApp: +91 9031063699** for API key access
+
+#### **📋 Authentication Methods**
+```javascript
+// Method 1: X-API-Key Header (Recommended)
+headers: { 'X-API-Key': 'your_domain_api_key' }
+
+// Method 2: Authorization Bearer Token
+headers: { 'Authorization': 'Bearer your_domain_api_key' }
+
+// Method 3: URL Parameter
+'https://worker.workers.dev/?api_key=your_domain_api_key'
+```
+
+### 🔧 **PHP Implementation with API Key**
 ```php
-// Server-side API call to Example Worker with cURL (recommended)
-function callExampleWorker($terabox_url) {
-    $workerUrl = "https://example-worker.your-domain.workers.dev/";
+// Server-side Worker API call with required authentication
+function callWorkerAPI($terabox_url, $api_key) {
+    $workerUrl = "https://your-worker.workers.dev/";
     
     $ch = curl_init($workerUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['link' => $terabox_url]));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'X-API-Key: ' . $api_key,  // Required API key header
+        'Origin: https://your-domain.com',
+        'Referer: https://your-domain.com/'
+    ]);
     curl_setopt($ch, CURLOPT_TIMEOUT, 25);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -165,45 +200,102 @@ function callExampleWorker($terabox_url) {
 
     if ($http_code === 200) {
         return json_decode($response, true);
+    } elseif ($http_code === 401) {
+        return ['error' => 'Unauthorized - Invalid or missing API key'];
     }
     return false;
 }
 
-// Alternative using file_get_contents
+// Alternative with URL parameter method
+$workerUrl = "https://your-worker.workers.dev/?api_key=" . urlencode($api_key);
 $postData = json_encode(['link' => $teraboxUrl]);
 $context = stream_context_create([
     'http' => [
         'method' => 'POST',
-        'header' => 'Content-Type: application/json',
+        'header' => "Content-Type: application/json\r\n" .
+                   "Origin: https://your-domain.com\r\n" .
+                   "Referer: https://your-domain.com/\r\n",
         'content' => $postData
     ]
 ]);
 $response = file_get_contents($workerUrl, false, $context);
 ```
 
-### 📊 **Worker Response Format**
+### 📊 **Updated Worker Response Format**
 ```json
 {
-    "file_name": "Video Title.mp4",
-    "file_size": "125.4 MB", 
-    "size_bytes": 131538944,
-    "thumbnail": "https://thumbnail-url.jpg",
-    "download_link": "https://direct-download-url",
-    "proxy_url": "https://proxy-stream-url",
-    "duration": "00:05:30"
+    "status": "success",
+    "js_token": "authentication_token",
+    "uk": "user_key",
+    "shareid": "share_id",
+    "sign": "signature",
+    "timestamp": "1753220000",
+    "shorturl": "surl_parameter",
+    "total_files": 3,
+    "list": [
+        {
+            "fs_id": "file_system_id",
+            "name": "Video Title.mp4",
+            "size": 131538944,
+            "size_formatted": "125.4 MB",
+            "type": "video",
+            "is_dir": "0",
+            "download_link": "https://direct-download-url",
+            "fast_download_link": "https://worker.dev/download?url=...",
+            "stream_url": "https://worker.dev/stream?url=...",
+            "thumbnail": "https://thumbnail-url.jpg",
+            "folder": "root"
+        }
+    ]
 }
 ```
 
-### 🛠️ **Integration Examples**
-```php
-// Example: Process and display video
-$data = callExampleWorker($teraboxUrl);
-if ($data && !isset($data['error'])) {
-    echo "File: " . $data['file_name'];
-    echo "Size: " . $data['file_size']; 
-    echo "Stream: " . $data['proxy_url'];
+#### **🚨 Error Response Format**
+```json
+{
+    "error": "Access denied. API key is required.",
+    "error_code": "MISSING_API_KEY",
+    "message": "This API is paid. Contact WhatsApp: +91 9031063699",
+    "contact": "For API access, contact WhatsApp: +91 9031063699",
+    "documentation": "https://iteraplay.com/blog/post/purchase-api.php",
+    "authentication_methods": [
+        "Add 'X-API-Key: YOUR_DOMAIN_KEY' header",
+        "Add 'Authorization: Bearer YOUR_DOMAIN_KEY' header", 
+        "Add '?api_key=YOUR_DOMAIN_KEY' URL parameter"
+    ]
 }
 ```
+
+### 🛠️ **Updated Integration Examples**
+```php
+// Example: Process and display video with API key
+$api_key = "your_domain_specific_api_key"; // Get from WhatsApp: +91 9031063699
+$data = callWorkerAPI($teraboxUrl, $api_key);
+
+if ($data && !isset($data['error'])) {
+    if ($data['status'] === 'success' && !empty($data['list'])) {
+        $file = $data['list'][0]; // First file
+        echo "File: " . $file['name'];
+        echo "Size: " . $file['size_formatted']; 
+        echo "Stream: " . $file['stream_url'];
+        echo "Download: " . $file['fast_download_link'];
+        echo "Thumbnail: " . $file['thumbnail'];
+    }
+} else {
+    // Handle API errors
+    echo "Error: " . ($data['message'] ?? 'Unknown error');
+    if (isset($data['error_code']) && $data['error_code'] === 'MISSING_API_KEY') {
+        echo "Contact WhatsApp: +91 9031063699 for API access";
+    }
+}
+```
+
+#### **💡 Key Changes in Current Worker**
+- **🔐 Mandatory API Key**: Domain-specific authentication required
+- **📊 New Response Structure**: `status` and `list[]` array format  
+- **🗂️ Multi-File Support**: Handles folders and multiple files
+- **⚡ Enhanced Features**: `fast_download_link`, `stream_url`, folder processing
+- **🛡️ Better Security**: Domain validation, error handling, rate limiting
 
 ### ⚡ **Cloudflare Worker Features**
 - **Ultra-Fast Processing**: Sub-second video link processing globally  
@@ -214,38 +306,7 @@ if ($data && !isset($data['error'])) {
 - **Proxy Streaming**: Direct video streaming through proxy URLs
 - **Thumbnail Caching**: Automatic thumbnail generation and caching
 
-### 🔧 **Worker Code Structure**
-```javascript
-// Main processing function in Cloudflare Worker
-async function getFileInfo(link, request) {
-  try {
-    // Step 1: Fast initial fetch with 5 second timeout
-    const response = await fetch(link, { 
-      headers: HEADERS,
-      signal: AbortSignal.timeout(5000)
-    });
-    
-    // Step 2: Extract surl parameter
-    const finalUrl = response.url;
-    const url = new URL(finalUrl);
-    const surl = url.searchParams.get("surl");
-    
-    // Step 3: Make API call to get file data
-    const apiResponse = await fetch(`https://dm.1024tera.com/share/list?...`);
-    const data = await apiResponse.json();
-    
-    return {
-      file_name: data.server_filename,
-      file_size: getSize(data.size),
-      thumbnail: data.thumbs?.url4 || data.thumbs?.url3,
-      download_link: data.dlink,
-      proxy_url: `${PROXY_BASE_URL}/${data.fs_id}`
-    };
-  } catch (error) {
-    return { error: error.message };
-  }
-}
-```
+
 
 ### 📚 **Complete API Documentation**
 For detailed API documentation, pricing, and purchase:
