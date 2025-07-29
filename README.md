@@ -35,7 +35,7 @@
 - 📥 **Fast Downloads** - Download videos with single click
 - 🖼️ **Smart Thumbnails** - Automatic thumbnail generation and caching
 - 📱 **Mobile Responsive** - Optimized for all devices and screen sizes
-- 🔄 **Auto-Processing** - Intelligent link processing with Cloudflare Workers
+- 🔄 **Auto-Processing** - Intelligent link processing with iTeraPlay API
 
 ### 🚀 **Chrome Extension**
 - 🔧 **One-Click Processing** - Process TeraBox links directly from browser
@@ -74,7 +74,7 @@
 - **Frontend**: Responsive HTML/CSS with Ajax-powered interactions  
 - **Database**: MySQL with optimized queries and indexing
 - **Email System**: SMTP integration with premium HTML templates
-- **Cloudflare Workers**: Ultra-fast global video processing infrastructure
+- **iTeraPlay API**: Ultra-fast global video processing infrastructure
 - **Security**: SSL encryption, CSRF protection, input validation, and rate limiting
 
 ---
@@ -123,19 +123,19 @@
 
 ---
 
-## 🔌 Cloudflare Worker API
+## 🔌 iTeraPlay API
 
 ### 🚀 **Core Processing Engine**
-Our advanced Cloudflare Worker infrastructure powers the entire platform with ultra-fast TeraBox video processing across multiple global edge locations.
+Our advanced iTeraPlay API infrastructure powers the entire platform with ultra-fast TeraBox video processing across multiple global edge locations.
 
-### 🔑 **Cloudflare Worker API Integration**
+### 🔑 **iTeraPlay API Integration**
 
-Our Cloudflare Worker now requires **domain-specific API keys** for authentication. Each authorized domain gets its own unique API key for secure access.
+Our iTeraPlay API now requires **domain-specific API keys** for authentication. Each authorized domain gets its own unique API key for secure access.
 
 #### **🔐 API Key Authentication**
 ```javascript
-// Worker API integration with required API key
-const response = await fetch('https://your-worker.workers.dev/', {
+// iTeraPlay API integration with required API key
+const response = await fetch('https://api.iteraplay.com/', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -170,16 +170,16 @@ headers: { 'X-API-Key': 'your_domain_api_key' }
 headers: { 'Authorization': 'Bearer your_domain_api_key' }
 
 // Method 3: URL Parameter
-'https://worker.workers.dev/?api_key=your_domain_api_key'
+'https://api.iteraplay.com/?api_key=your_domain_api_key'
 ```
 
 ### 🔧 **PHP Implementation with API Key**
 ```php
-// Server-side Worker API call with required authentication
-function callWorkerAPI($terabox_url, $api_key) {
-    $workerUrl = "https://your-worker.workers.dev/";
+// Server-side iTeraPlay API call with required authentication
+function callIteraplayAPI($terabox_url, $api_key) {
+    $iteraplayUrl = "https://api.iteraplay.com/";
     
-    $ch = curl_init($workerUrl);
+    $ch = curl_init($iteraplayUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['link' => $terabox_url]));
@@ -207,7 +207,7 @@ function callWorkerAPI($terabox_url, $api_key) {
 }
 
 // Alternative with URL parameter method
-$workerUrl = "https://your-worker.workers.dev/?api_key=" . urlencode($api_key);
+$iteraplayUrl = "https://api.iteraplay.com/?api_key=" . urlencode($api_key);
 $postData = json_encode(['link' => $teraboxUrl]);
 $context = stream_context_create([
     'http' => [
@@ -218,10 +218,10 @@ $context = stream_context_create([
         'content' => $postData
     ]
 ]);
-$response = file_get_contents($workerUrl, false, $context);
+$response = file_get_contents($iteraplayUrl, false, $context);
 ```
 
-### 📊 **Updated Worker Response Format**
+### 📊 **Updated API Response Format**
 ```json
 {
     "status": "success",
@@ -270,7 +270,7 @@ $response = file_get_contents($workerUrl, false, $context);
 ```php
 // Example: Process and display video with API key
 $api_key = "your_domain_specific_api_key"; // Get from WhatsApp: +91 9031063699
-$data = callWorkerAPI($teraboxUrl, $api_key);
+$data = callIteraplayAPI($teraboxUrl, $api_key);
 
 if ($data && !isset($data['error'])) {
     if ($data['status'] === 'success' && !empty($data['list'])) {
@@ -290,14 +290,14 @@ if ($data && !isset($data['error'])) {
 }
 ```
 
-#### **💡 Key Changes in Current Worker**
+#### **💡 Key Changes in Current API**
 - **🔐 Mandatory API Key**: Domain-specific authentication required
 - **📊 New Response Structure**: `status` and `list[]` array format  
 - **🗂️ Multi-File Support**: Handles folders and multiple files
 - **⚡ Enhanced Features**: `fast_download_link`, `stream_url`, folder processing
 - **🛡️ Better Security**: Domain validation, error handling, rate limiting
 
-### ⚡ **Cloudflare Worker Features**
+### ⚡ **iTeraPlay API Features**
 - **Ultra-Fast Processing**: Sub-second video link processing globally  
 - **Advanced Headers**: Browser-like headers with cookie authentication
 - **Size Formatting**: Automatic file size conversion (bytes to GB/MB/KB)
@@ -395,7 +395,7 @@ We respect your privacy and handle data responsibly. Read our complete privacy p
 ## 🚀 Latest Updates
 
 ### 🎉 **Recent Improvements** (July 2025)
-- ⚡ **Performance Boost** - 50% faster video processing with Cloudflare optimization
+- ⚡ **Performance Boost** - 50% faster video processing with iTeraPlay API optimization
 - 🎨 **UI Enhancement** - Modern dark theme with improved user experience
 - 🔧 **Chrome Extension v5.11** - Enhanced with smart rating system and unlimited access
 - 📱 **Mobile Optimization** - Better responsive design for mobile devices
