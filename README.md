@@ -1,4 +1,4 @@
-# 🎬 iTeraPlay - Advanced TeraBox Video Platform
+# 🎬 iTeraPlay - Advanced TeraBox Video Player & Downloader Platform
 
 <div align="center">
 
