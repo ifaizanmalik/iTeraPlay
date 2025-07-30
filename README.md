@@ -135,7 +135,7 @@ Our iTeraPlay API now requires **domain-specific API keys** for authentication. 
 #### **🔐 API Key Authentication**
 ```javascript
 // iTeraPlay API integration with required API key
-const response = await fetch('https://api.iteraplay.com/', {
+const response = await fetch('your-api-endpoint.com/', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -170,14 +170,14 @@ headers: { 'X-API-Key': 'your_domain_api_key' }
 headers: { 'Authorization': 'Bearer your_domain_api_key' }
 
 // Method 3: URL Parameter
-'https://api.iteraplay.com/?api_key=your_domain_api_key'
+'your-api-endpoint.com/?api_key=your_domain_api_key'
 ```
 
 ### 🔧 **PHP Implementation with API Key**
 ```php
 // Server-side iTeraPlay API call with required authentication
 function callIteraplayAPI($terabox_url, $api_key) {
-    $iteraplayUrl = "https://api.iteraplay.com/";
+    $iteraplayUrl = "your-api-endpoint.com/";
     
     $ch = curl_init($iteraplayUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -207,7 +207,7 @@ function callIteraplayAPI($terabox_url, $api_key) {
 }
 
 // Alternative with URL parameter method
-$iteraplayUrl = "https://api.iteraplay.com/?api_key=" . urlencode($api_key);
+$iteraplayUrl = "your-api-endpoint.com/?api_key=" . urlencode($api_key);
 $postData = json_encode(['link' => $teraboxUrl]);
 $context = stream_context_create([
     'http' => [
